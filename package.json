@@ -1,6 +1,6 @@
 {
   "name": "native-querystring",
-  "version": "0.0.0",
+  "version": "1.0.0",
   "description": "Node’s querystring module implemented using the built-in URLSeachParams API.",
   "main": "index.cjs.js",
   "module": "index.esm.js",
