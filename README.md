@@ -33,6 +33,101 @@ If you want to alias `querystring` module to this module, refer to
 [Webpack][webpack-alias] and [Rollup][rollup-alias] documentation on aliasing
 modules (or, [native-url alias explanation][native-url-alias]).
 
+### Usage with `native-url`, ES Modules and Webpack
+
+<details>
+	
+<summary>Show me</summary>
+	
+Since `native-url` exposes ESM file through `.mjs` extension, additional Webpack configuration is needed to make `native-url` use ESM version of `native-querystring`.
+
+```js
+{
+	module: {
+		rules: [
+			{
+				type: 'javascript/auto',
+				test: /\.mjs$/,
+				include: /node_modules\/native-url/,
+				resolve: {
+					mainFields: ['module'],
+				},
+				use: []
+			}
+		]
+	}
+};
+```
+</details>
+
+### Named exports as default export
+
+<details>
+	
+<summary>Show me</summary>
+
+`native-querystring` (and `native-url`) expose their methods thorugh named exports. To get default behavior you would need to import entire module contents
+
+```js
+import * as qs from 'native-querystring'; // or 'querystring' if aliased`
+import * as url from 'native-url'; // or 'url' if aliased`
+```
+
+This is fine for your own code, but dependencies will throw error since they can’t find default export by default for both modules.
+
+To fix this, it’s best to make changes to code at compile time to expose every named export as property of object which should be default export.
+
+Here is a Babel plugin code which achieves that:
+
+```js
+const babel = require('@babel/core');
+
+const plugin = babel.createConfigItem(({ types: t }) => {
+	return {
+		visitor: {
+			ExportNamedDeclaration(path, parent) {
+				const properties = path.node.specifiers.map((node) => ({
+					exported: node.exported.name,
+					local: node.local.name
+				}));
+				path.insertAfter(
+					t.exportDefaultDeclaration(
+						t.objectExpression(
+							properties.map((prop) =>
+								t.objectProperty(
+									t.identifier(prop.exported),
+									t.identifier(prop.local)
+								)
+							)
+						)
+					)
+				);
+			}
+		}
+	};
+});
+```
+
+And here is how you apply it with Webpack:
+
+```js
+{
+	test: /\.m?js$/,
+	include: /node_modules\/(?:native-url|native-querystring)/,
+	use: [
+		{
+			loader: 'babel-loader',
+			options: {
+				plugins: [plugin]
+			}
+		}
+	]
+};
+```
+
+After that you can use both modules’ named exports as default export.
+</details>
+
 ## API
 
 ### parse(input, separator, equals)
