@@ -2,6 +2,8 @@
 
 ## [Unreleased][]
 
+## [1.1.0][] - 2020-10-29
+
 ### Changed
 
 -   Upgrade package
@@ -14,3 +16,5 @@
 
 [unreleased]: https://github.com/niksy/native-querystring/compare/v1.0.0...HEAD
 [1.0.0]: https://github.com/niksy/native-querystring/tree/v1.0.0
+[unreleased]: https://github.com/niksy/native-querystring/compare/v1.1.0...HEAD
+[1.1.0]: https://github.com/niksy/native-querystring/tree/v1.1.0
