@@ -94,7 +94,7 @@ function stringify(
  * @param  {string} separator
  * @param  {string} equals
  *
- * @returns {Object}
+ * @returns {object}
  */
 function parse(
 	input,

@@ -50,14 +50,15 @@ Since `native-url` exposes ESM file through `.mjs` extension, additional Webpack
 				test: /\.mjs$/,
 				include: /node_modules\/native-url/,
 				resolve: {
-					mainFields: ['module'],
+					mainFields: ['module']
 				},
 				use: []
 			}
-		]
+		];
 	}
-};
+}
 ```
+
 </details>
 
 ### Named exports as default export
@@ -66,16 +67,19 @@ Since `native-url` exposes ESM file through `.mjs` extension, additional Webpack
 	
 <summary>Show me</summary>
 
-`native-querystring` (and `native-url`) expose their methods thorugh named exports. To get default behavior you would need to import entire module contents
+`native-querystring` (and `native-url`) expose their methods thorugh named
+exports. To get default behavior you would need to import entire module contents
 
 ```js
 import * as qs from 'native-querystring'; // or 'querystring' if aliased`
 import * as url from 'native-url'; // or 'url' if aliased`
 ```
 
-This is fine for your own code, but dependencies will throw error since they can’t find default export by default for both modules.
+This is fine for your own code, but dependencies will throw error since they
+can’t find default export by default for both modules.
 
-To fix this, it’s best to make changes to code at compile time to expose every named export as property of object which should be default export.
+To fix this, it’s best to make changes to code at compile time to expose every
+named export as property of object which should be default export.
 
 Here is a Babel plugin code which achieves that:
 
@@ -126,6 +130,7 @@ And here is how you apply it with Webpack:
 ```
 
 After that you can use both modules’ named exports as default export.
+
 </details>
 
 ## API
@@ -186,9 +191,8 @@ available.
 
 ## Test
 
-Test suite is taken from [Node core][node-tests] and
-[`querystring-es3` module][querystring-es3-tests] to cover all native querystring test
-cases.
+Test suite is taken from [Node core][node-tests] and [`querystring-es3`
+module][querystring-es3-tests] to cover all native querystring test cases.
 
 For automated tests, run `npm run test:automated` (append `:watch` for watcher
 support).
@@ -202,7 +206,7 @@ MIT © [Ivan Nikolić](http://ivannikolic.com)
 [ci]: https://travis-ci.com/niksy/native-querystring
 [ci-img]: https://travis-ci.com/niksy/native-querystring.svg?branch=master
 [browserstack]: https://www.browserstack.com/
-[browserstack-img]: https://www.browserstack.com/automate/badge.svg?badge_key=Vk9RQ1VYTlRpQ3YzU0FtdENuajhCRFA1SzFMZnVkbWxtMzBuT1VjeWQ1Yz0tLWVaOGxkZmFkY2I3Vml4azNQU0x4ZVE9PQ==--a6c932cdc306cb44c5c4a67f4678965615985e7c
+[browserstack-img]: https://www.browserstack.com/automate/badge.svg?badge_key=a3dZR2xHRi9DSDJlVkZIVER6VXUzSUlsdndJQWpHZ1VOYjVBbEZBTHNqWT0tLW8zMEVSdjJ2OEg2TjdtM1NQV0F2c2c9PQ==--3f124646ce8289404c239e2264a39b18ca975418
 [mdn]: https://developer.mozilla.org/en-US/docs/Web/API/URLSearchParams
 [polyfill]: https://github.com/ungap/url-search-params
 [native-url]: https://github.com/GoogleChromeLabs/native-url

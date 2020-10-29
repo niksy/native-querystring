@@ -6,8 +6,8 @@
 import assert from 'assert';
 import * as qs from '../index';
 
-describe('test-querystring-escape', function() {
-	it('does basic escaping', function() {
+describe('test-querystring-escape', function () {
+	it('does basic escaping', function () {
 		assert.deepEqual(qs.escape(5), '5');
 		assert.deepEqual(qs.escape('test'), 'test');
 		assert.deepEqual(qs.escape({}), '%5Bobject+Object%5D');
@@ -17,31 +17,31 @@ describe('test-querystring-escape', function() {
 		assert.deepEqual(qs.escape('�test'), '%EF%BF%BDtest');
 	});
 
-	it('using toString for objects', function() {
+	it('using toString for objects', function () {
 		assert.strictEqual(
 			qs.escape({ test: 5, toString: () => 'test', valueOf: () => 10 }),
 			'test'
 		);
 	});
 
-	it('toString is not callable, must throw an error', function() {
+	it('toString is not callable, must throw an error', function () {
 		assert.throws(() => qs.escape({ toString: 5 }));
 	});
 
-	it('should use valueOf instead of non-callable toString', function() {
+	it('should use valueOf instead of non-callable toString', function () {
 		assert.strictEqual(
 			qs.escape({ toString: 5, valueOf: () => 'test' }),
 			'test'
 		);
 	});
 
-	it('throws when given Symbol', function() {
+	it('throws when given Symbol', function () {
 		try {
 			qs.escape(Symbol('test'));
 		} catch (error) {
 			if (
 				error instanceof TypeError &&
-				/[sS]ymbol.+string/.test(error.message)
+				/[Ss]ymbol.+string/.test(error.message)
 			) {
 				assert.ok(true);
 			} else {

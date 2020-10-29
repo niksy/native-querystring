@@ -1,22 +1,29 @@
 'use strict';
 
 const path = require('path');
-const resolve = require('rollup-plugin-node-resolve');
-const commonjs = require('rollup-plugin-commonjs');
+const fs = require('fs');
+const { default: resolve } = require('@rollup/plugin-node-resolve');
+const commonjs = require('@rollup/plugin-commonjs');
 const nodeBuiltins = require('rollup-plugin-node-builtins');
 const globals = require('rollup-plugin-node-globals');
-const babel = require('rollup-plugin-babel');
+const { default: babel } = require('@rollup/plugin-babel');
 const istanbul = require('rollup-plugin-istanbul');
 const rollupConfig = require('./rollup.config');
 
 let config;
 
-const local = typeof process.env.CI === 'undefined' || process.env.CI === 'false';
-const port = 9001;
+const isCI =
+	typeof process.env.CI !== 'undefined' && process.env.CI !== 'false';
+const isPR =
+	typeof process.env.TRAVIS_PULL_REQUEST !== 'undefined' &&
+	process.env.TRAVIS_PULL_REQUEST !== 'false';
+const local = !isCI || (isCI && isPR);
 
-if ( local ) {
+const port = 0;
+
+if (local) {
 	config = {
-		browsers: ['Chrome'],
+		browsers: ['Chrome']
 	};
 } else {
 	config = {
@@ -67,21 +74,17 @@ if ( local ) {
 				project: 'native-querystring',
 				build: 'Automated (Karma)',
 				name: 'IE11'
-			},
+			}
 		},
 		browsers: ['BS-Chrome', 'BS-Firefox', 'BS-IE9', 'BS-IE11']
 	};
 }
 
-module.exports = function ( baseConfig ) {
-
-	baseConfig.set(Object.assign({
+module.exports = function (baseConfig) {
+	baseConfig.set({
 		basePath: '',
 		frameworks: ['mocha', 'fixture'],
-		files: [
-			'test/**/*.html',
-			{ pattern: 'test/**/*.js', watched: false }
-		],
+		files: ['test/**/*.html', { pattern: 'test/**/*.js', watched: false }],
 		exclude: [],
 		preprocessors: {
 			'test/**/*.html': ['html2js'],
@@ -103,8 +106,8 @@ module.exports = function ( baseConfig ) {
 		rollupPreprocessor: {
 			plugins: [
 				{
-					async transform (code, id) {
-						if ( !id.includes('native-querystring/index.js') ) {
+					async transform(code, id) {
+						if (!id.includes('native-querystring/index.js')) {
 							return;
 						}
 						return {
@@ -122,7 +125,7 @@ module.exports = function ( baseConfig ) {
 				nodeBuiltins(),
 				babel({
 					exclude: 'node_modules/**',
-					runtimeHelpers: true
+					babelHelpers: 'runtime'
 				}),
 				resolve({
 					mainFields: ['browser', 'module', 'main'],
@@ -131,12 +134,14 @@ module.exports = function ( baseConfig ) {
 				commonjs(),
 				babel({
 					include: 'node_modules/{has-flag,supports-color}/**',
-					runtimeHelpers: true,
+					babelHelpers: 'runtime',
 					babelrc: false,
 					configFile: path.resolve(__dirname, '.babelrc')
 				}),
 				globals(),
-				...rollupConfig.plugins.filter(({ name }) => !['babel'].includes(name)),
+				...rollupConfig.plugins.filter(
+					({ name }) => !['babel'].includes(name)
+				),
 				istanbul({
 					exclude: ['test/**/*.js', 'node_modules/**/*']
 				})
@@ -153,13 +158,13 @@ module.exports = function ( baseConfig ) {
 			fixWebpackSourcePaths: true,
 			reports: ['html', 'text'],
 			thresholds: {
-				global: {
-					statements: 80
-				}
+				global: JSON.parse(
+					fs.readFileSync(path.join(__dirname, '.nycrc'), 'utf8')
+				)
 			}
 		},
 		singleRun: true,
-		concurrency: Infinity
-	}, config));
-
+		concurrency: Infinity,
+		...config
+	});
 };

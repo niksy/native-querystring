@@ -201,7 +201,7 @@ function check(actual, expected, input) {
 			`Expected keys: ${inspect(expectedKeys)}`;
 	}
 	assert.deepEqual(actualKeys, expectedKeys, message);
-	expectedKeys.forEach(function(key) {
+	expectedKeys.forEach(function (key) {
 		if (typeof input === 'string') {
 			message =
 				`Input: ${inspect(input)}\n` +
@@ -215,8 +215,8 @@ function check(actual, expected, input) {
 	});
 }
 
-describe('test-querystring', function() {
-	it('performs basic parsing', function() {
+describe('test-querystring', function () {
+	it('performs basic parsing', function () {
 		assert.strictEqual(
 			'918854443121279438895193',
 			qs.parse('id=918854443121279438895193').id,
@@ -224,31 +224,31 @@ describe('test-querystring', function() {
 		);
 	});
 
-	it('test that the canonical qs is parsed properly', function() {
-		qsTestCases.forEach(function(testCase) {
+	it('test that the canonical qs is parsed properly', function () {
+		qsTestCases.forEach(function (testCase) {
 			check(qs.parse(testCase[0]), testCase[2], testCase[0]);
 		});
 	});
 
-	it('test that the colon test cases can do the same', function() {
-		qsColonTestCases.forEach(function(testCase) {
+	it('test that the colon test cases can do the same', function () {
+		qsColonTestCases.forEach(function (testCase) {
 			check(qs.parse(testCase[0], ';', ':'), testCase[2]);
 		});
 	});
 
-	it('test the weird objects, that they get parsed properly', function() {
-		qsWeirdObjects.forEach(function(testCase) {
+	it('test the weird objects, that they get parsed properly', function () {
+		qsWeirdObjects.forEach(function (testCase) {
 			check(qs.parse(testCase[1]), testCase[2]);
 		});
 	});
 
-	it('test non munge test cases', function() {
-		qsNoMungeTestCases.forEach(function(testCase) {
+	it('test non munge test cases', function () {
+		qsNoMungeTestCases.forEach(function (testCase) {
 			assert.deepEqual(testCase[0], qs.stringify(testCase[1], '&', '='));
 		});
 	});
 
-	it('test the nested qs-in-qs case', function() {
+	it('test the nested qs-in-qs case', function () {
 		const f = qs.parse('a=b&q=x%3Dy%26y%3Dz');
 		check(
 			f,
@@ -266,7 +266,7 @@ describe('test-querystring', function() {
 		check(f.q, expectedInternal);
 	});
 
-	it('test nested in colon', function() {
+	it('test nested in colon', function () {
 		const f = qs.parse('a:b;q:x%3Ay%3By%3Az', ';', ':');
 		check(
 			f,
@@ -283,21 +283,21 @@ describe('test-querystring', function() {
 		check(f.q, expectedInternal);
 	});
 
-	it('test stringifying basic', function() {
-		qsTestCases.forEach(function(testCase) {
+	it('test stringifying basic', function () {
+		qsTestCases.forEach(function (testCase) {
 			assert.equal(testCase[1], qs.stringify(testCase[2]));
 		});
 
-		qsColonTestCases.forEach(function(testCase) {
+		qsColonTestCases.forEach(function (testCase) {
 			assert.equal(testCase[1], qs.stringify(testCase[2], ';', ':'));
 		});
 
-		qsWeirdObjects.forEach(function(testCase) {
+		qsWeirdObjects.forEach(function (testCase) {
 			assert.equal(testCase[1], qs.stringify(testCase[0]));
 		});
 	});
 
-	it('test stringifying invalid surrogate pair', function() {
+	it('test stringifying invalid surrogate pair', function () {
 		try {
 			assert.strictEqual(
 				qs.stringify({ foo: '\udc00' }),
@@ -312,7 +312,7 @@ describe('test-querystring', function() {
 		}
 	});
 
-	it('test stringifying coerce numbers to string', function() {
+	it('test stringifying coerce numbers to string', function () {
 		assert.strictEqual('foo=0', qs.stringify({ foo: 0 }));
 		assert.strictEqual('foo=0', qs.stringify({ foo: -0 }));
 		assert.strictEqual('foo=3', qs.stringify({ foo: 3 }));
@@ -321,7 +321,7 @@ describe('test-querystring', function() {
 		assert.strictEqual('foo=', qs.stringify({ foo: Infinity }));
 	});
 
-	it('test stringifying nested', function() {
+	it('test stringifying nested', function () {
 		const f = qs.stringify({
 			a: 'b',
 			q: qs.stringify({
@@ -332,7 +332,7 @@ describe('test-querystring', function() {
 		assert.equal(f, 'a=b&q=x%3Dy%26y%3Dz');
 	});
 
-	it('test stringifying nested in colon', function() {
+	it('test stringifying nested in colon', function () {
 		const f = qs.stringify(
 			{
 				a: 'b',
@@ -351,7 +351,7 @@ describe('test-querystring', function() {
 		assert.equal(f, 'a:b;q:x%3Ay%3By%3Az');
 	});
 
-	it('test stringifying empty string', function() {
+	it('test stringifying empty string', function () {
 		assert.strictEqual(qs.stringify(), '');
 		assert.strictEqual(qs.stringify(0), '');
 		assert.strictEqual(qs.stringify([]), '');
@@ -361,15 +361,15 @@ describe('test-querystring', function() {
 		check(qs.parse(), {});
 	});
 
-	it('empty sep', function() {
+	it('empty sep', function () {
 		check(qs.parse('a', []), { a: '' });
 	});
 
-	it('empty eq', function() {
+	it('empty eq', function () {
 		check(qs.parse('a', null, []), { '': 'a' });
 	});
 
-	it('test separator and "equals" parsing order', function() {
+	it('test separator and "equals" parsing order', function () {
 		check(qs.parse('foo&bar', '&', '&'), { foo: '', bar: '' });
 	});
 });

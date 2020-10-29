@@ -1,22 +1,22 @@
 {
 	"root": true,
-	"extends": [
-		"niksy",
-		"niksy/next",
-		"niksy/browser",
-		"prettier"
-	],
-	"plugins": [
-		"prettier"
-	],
+	"extends": ["niksy", "niksy/next", "niksy/browser", "prettier"],
+	"plugins": ["prettier", "unicorn", "node"],
 	"rules": {
-		"prettier/prettier": 1
+		"prettier/prettier": 1,
+		"unicorn/prevent-abbreviations": [
+			1,
+			{
+				"replacements": {
+					"params": false
+				}
+			}
+		],
+		"node/prefer-global/url-search-params": 0
 	},
 	"overrides": [
 		{
-			"files": [
-				"karma.conf.js"
-			],
+			"files": ["karma.conf.js"],
 			"env": {
 				"node": true,
 				"es6": true

@@ -1,10 +1,13 @@
 {
-	"extends": [
-		"niksy/tests"
-	],
+	"extends": ["niksy/tests"],
+	"plugins": ["unicorn", "import", "mocha"],
 	"rules": {
 		"unicorn/new-for-builtins": 0,
 		"no-undefined": 0,
-		"no-new-wrappers": 0
-	}
+		"no-new-wrappers": 0,
+		"import/no-namespace": 0,
+		"mocha/valid-test-description": 0,
+		"mocha/valid-suite-description": 0
+	},
+	"ignorePatterns": ["/**/fixtures"]
 }
