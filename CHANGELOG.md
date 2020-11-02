@@ -2,6 +2,10 @@
 
 ## [Unreleased][]
 
+### Fixed
+
+-   Accessing `package.json` being restricted since it’s no longer exported
+
 ## [1.1.0][] - 2020-10-29
 
 ### Changed
