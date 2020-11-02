@@ -1,6 +1,6 @@
 {
   "name": "native-querystring",
-  "version": "1.1.0",
+  "version": "1.1.1",
   "description": "Node’s querystring module implemented using the built-in URLSeachParams API.",
   "license": "MIT",
   "author": "Ivan Nikolić <niksy5@gmail.com> (http://ivannikolic.com)",
